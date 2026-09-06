@@ -17,9 +17,9 @@
 
   <!-- Official Proven CDNs -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <style>
     body {
@@ -46,11 +46,23 @@
     </div>
   </div>
 
+  <script>
+    // Fail-safe global error display to prevent silent freezing
+    window.addEventListener('error', function(e) {
+      var root = document.getElementById('root');
+      if (root) {
+        root.innerHTML = '<div style="padding:20px;color:#991B1B;font-size:12px;background:#FEE2E2;margin:20px;border-radius:8px;">' +
+          '<strong>စနစ် ချို့ယွင်းချက်:</strong> ' + (e.message || 'Syntax or Script loading error') + '</div>';
+      }
+    });
+  </script>
+
+  <!-- SINGLE ERROR-FREE BABEL SCRIPT CONTEXT -->
   <script type="text/babel">
     const { useState, useEffect, Component } = React;
 
     // ==========================================
-    // 1. CONSTANTS & ASTRONOMICAL TABLES
+    // 1. TOP-LEVEL CONSTANTS & ASTRONOMICAL TABLES
     // ==========================================
     const RASI_NAMES_EN = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'];
     const RASI_NAMES_MY = ['မိဿ', 'ပြိဿ', 'မေထုန်', 'ကရကဋ်', 'သိဟ်', 'ကန်', 'တူ', 'ဗြိစ္ဆာ', 'ဓနု', 'မကာရ', 'ကုံ', 'မိန်'];
@@ -185,7 +197,9 @@
       }
     };
 
-    // Math normalizer
+    // ==========================================
+    // 2. MATHEMATICAL & EPHEMERIS CORE
+    // ==========================================
     function norm360(deg) {
       if (typeof deg !== 'number' || isNaN(deg)) return 0;
       let d = deg % 360;
@@ -894,7 +908,7 @@
     }
 
     // ==========================================
-    // 4. CHART & MODAL COMPONENTS (HOISTED)
+    // 4. CHART & MODAL COMPONENTS (STRICT TOP-LEVEL)
     // ==========================================
     function EastChart({ planets, transitPlanets, isOverlay, vargaNum, birthInfo, transitInfo, size = 330 }) {
       const u = size / 3;
@@ -1095,7 +1109,6 @@
       );
     }
 
-    // Fullscreen Chart View Modal (Pure Opaque Sheet - Never Dim)
     function FullscreenChartModal({ isOpen, onClose, chartType, planets, transitPlanets, isOverlay, vargaNum, birthInfo, transitInfo }) {
       if (!isOpen) return null;
       return (
@@ -1129,7 +1142,7 @@
     }
 
     // ==========================================
-    // 5. MAIN APPLICATION CONTROLLER
+    // 5. MAIN CONTROLLER APP COMPONENT
     // ==========================================
     function MainApp() {
       const [activeTab, setActiveTab] = useState('transit');
@@ -1217,7 +1230,7 @@
         setSearchTarget(target);
         try {
           const res = await fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(text) + '&limit=5', {
-            headers: { 'User-Agent': 'JyotishPWA/14.0' }
+            headers: { 'User-Agent': 'JyotishPWA/15.0' }
           });
           const data = await res.json();
           setCitySuggestions(data);
@@ -1249,7 +1262,6 @@
         return h;
       };
 
-      // Guaranteed Defined Date Object and Inputs
       const curY = now.getFullYear();
       const sY = safeYear(birthYear, curY);
       const sM = safeMonth(birthMonth, now.getMonth() + 1);

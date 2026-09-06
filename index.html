@@ -15,11 +15,11 @@
   <link rel="apple-touch-icon" href="https://api.iconify.design/twemoji:om.svg">
   <link rel="icon" type="image/svg+xml" href="https://api.iconify.design/twemoji:om.svg">
 
-  <!-- Official Proven CDNs -->
+  <!-- High-Speed Bulletproof CDNs (No CORS Redirect Blocks on iOS) -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.24.4/babel.min.js"></script>
 
   <style>
     body {
@@ -47,22 +47,22 @@
   </div>
 
   <script>
-    // Fail-safe global error display to prevent silent freezing
+    // Fail-safe visible error reporter so it never hangs silently
     window.addEventListener('error', function(e) {
       var root = document.getElementById('root');
       if (root) {
-        root.innerHTML = '<div style="padding:20px;color:#991B1B;font-size:12px;background:#FEE2E2;margin:20px;border-radius:8px;">' +
-          '<strong>စနစ် ချို့ယွင်းချက်:</strong> ' + (e.message || 'Syntax or Script loading error') + '</div>';
+        root.innerHTML = '<div style="padding:20px;color:#991B1B;background:#FEE2E2;margin:20px;border-radius:8px;font-size:12px;">' +
+          '<strong>စနစ် ချို့ယွင်းချက်:</strong> ' + (e.message || 'Error loading script') + '</div>';
       }
     });
   </script>
 
-  <!-- SINGLE ERROR-FREE BABEL SCRIPT CONTEXT -->
+  <!-- SINGLE UNIFIED BABEL SCRIPT (PROPER DECLARATION ORDER) -->
   <script type="text/babel">
     const { useState, useEffect, Component } = React;
 
     // ==========================================
-    // 1. TOP-LEVEL CONSTANTS & ASTRONOMICAL TABLES
+    // 1. CONSTANTS & ASTRONOMICAL TABLES
     // ==========================================
     const RASI_NAMES_EN = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'];
     const RASI_NAMES_MY = ['မိဿ', 'ပြိဿ', 'မေထုန်', 'ကရကဋ်', 'သိဟ်', 'ကန်', 'တူ', 'ဗြိစ္ဆာ', 'ဓနု', 'မကာရ', 'ကုံ', 'မိန်'];
@@ -908,7 +908,7 @@
     }
 
     // ==========================================
-    // 4. CHART & MODAL COMPONENTS (STRICT TOP-LEVEL)
+    // 3. CHART & MODAL COMPONENTS (STRICT TOP-LEVEL)
     // ==========================================
     function EastChart({ planets, transitPlanets, isOverlay, vargaNum, birthInfo, transitInfo, size = 330 }) {
       const u = size / 3;
@@ -1109,6 +1109,7 @@
       );
     }
 
+    // Fullscreen Chart View Modal (Pure Opaque Sheet - Never Dim)
     function FullscreenChartModal({ isOpen, onClose, chartType, planets, transitPlanets, isOverlay, vargaNum, birthInfo, transitInfo }) {
       if (!isOpen) return null;
       return (
@@ -1141,8 +1142,35 @@
       );
     }
 
+    // Helper functions for Input validation
+    function safeYear(val, fallback) {
+      const n = parseInt(val, 10);
+      if (isNaN(n) || n < 1900 || n > 2100) return fallback;
+      return n;
+    }
+    function safeMonth(val, fallback) {
+      const n = parseInt(val, 10);
+      if (isNaN(n) || n < 1 || n > 12) return fallback;
+      return n;
+    }
+    function safeDay(val, fallback) {
+      const n = parseInt(val, 10);
+      if (isNaN(n) || n < 1 || n > 31) return fallback;
+      return n;
+    }
+    function safeHour(val, fallback) {
+      const n = parseInt(val, 10);
+      if (isNaN(n) || n < 1 || n > 12) return fallback;
+      return n;
+    }
+    function safeMinute(val, fallback) {
+      const n = parseInt(val, 10);
+      if (isNaN(n) || n < 0 || n > 59) return fallback;
+      return n;
+    }
+
     // ==========================================
-    // 5. MAIN CONTROLLER APP COMPONENT
+    // 4. MAIN CONTROLLER APP COMPONENT
     // ==========================================
     function MainApp() {
       const [activeTab, setActiveTab] = useState('transit');
@@ -1480,7 +1508,7 @@
             </div>
           )}
 
-          {/* TAB 3: READINGS (အဟောစာတမ်း) */}
+          {/* TAB 3: READINGS */}
           {activeTab === 'readings' && (
             <div className="p-3 space-y-3 text-xs">
               <h2 className="font-bold text-emerald-900 text-sm">ဇာတာ အဟောစာတမ်း (Comprehensive Reading)</h2>
@@ -1634,7 +1662,7 @@
             </div>
           )}
 
-          {/* TAB 4: PRASHNA HORARY (ဟူးရား - စာရိုက်မေးမြန်းမှုစနစ်) */}
+          {/* TAB 4: PRASHNA HORARY (ဟူးရား) */}
           {activeTab === 'prashna' && (
             <div className="p-3 space-y-3 text-xs">
               <div className="flex justify-between items-baseline">
